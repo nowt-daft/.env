@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+mkdir -p ~/.local/share/fonts
+
+for FONT in $(ls .); do
+	if [ -d $FONT ]; then
+		echo $FONT
+		cp -R $FONT ~/.local/share/fonts
+	fi
+done

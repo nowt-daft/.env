@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+sudo cp -R  bin/*    /usr/bin
+sudo cp -R  lib/*    /usr/lib
+sudo cp -R  share/*  /usr/share
+
+#cp nvim.desktop ~/.local/share/applications
+
+git clone https://github.com/NvChad/starter ~/.config/nvim
+

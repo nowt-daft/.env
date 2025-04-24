@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=kitty
+GenericName=Terminal emulator
+
+Exec=/home/dumpstergoon/.local/bin/kitty
+
+Icon=kitty
+StartupNotify=true
+StartupWMClass=kitty
+
+Type=Application
+Categories=System;TerminalEmulator;
+Comment=Fast, feature-rich, GPU based terminal

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+curl -fsSL https://deb.nodesource.com/setup_23.x | sudo -E bash -
+sudo apt install -y nodejs
+
+node -v
+
+curl -fsSL https://bun.sh/install | bash

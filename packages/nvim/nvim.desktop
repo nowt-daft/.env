@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Name=nvim
+
+Exec=kitty --start-as fullscreen /usr/bin/nvim %F
+
+Icon=nvim;neovim;vim;
+Terminal=false
+StartupWMClass=kitty
+
+Type=Application
+Categories=IDE;TextEditor;Development;Utility;Application;
+Comment=NeoVim in kitty terminal
+
+MimeType=application/nvim;
+Keywords=nvim;neovim;vim;code;ide;development;programming;

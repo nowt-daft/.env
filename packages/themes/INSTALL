@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+mkdir -p ~/.themes
+#cp -R Sweet-mars ~/.themes
+cp -R Sweet-mars-v40 ~/.themes
