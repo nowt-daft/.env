@@ -5626,6 +5626,7 @@ efm-ignore	quickfix.txt	/*efm-ignore*
 eiffel.vim	syntax.txt	/*eiffel.vim*
 elixir.vim	syntax.txt	/*elixir.vim*
 emacs-keys	tips.txt	/*emacs-keys*
+emoji	mbyte.txt	/*emoji*
 empty()	builtin.txt	/*empty()*
 encoding-names	mbyte.txt	/*encoding-names*
 encoding-values	mbyte.txt	/*encoding-values*
@@ -6614,6 +6615,11 @@ hl-DiagnosticUnderlineInfo	diagnostic.txt	/*hl-DiagnosticUnderlineInfo*
 hl-DiagnosticUnderlineOk	diagnostic.txt	/*hl-DiagnosticUnderlineOk*
 hl-DiagnosticUnderlineWarn	diagnostic.txt	/*hl-DiagnosticUnderlineWarn*
 hl-DiagnosticUnnecessary	diagnostic.txt	/*hl-DiagnosticUnnecessary*
+hl-DiagnosticVirtualLinesError	diagnostic.txt	/*hl-DiagnosticVirtualLinesError*
+hl-DiagnosticVirtualLinesHint	diagnostic.txt	/*hl-DiagnosticVirtualLinesHint*
+hl-DiagnosticVirtualLinesInfo	diagnostic.txt	/*hl-DiagnosticVirtualLinesInfo*
+hl-DiagnosticVirtualLinesOk	diagnostic.txt	/*hl-DiagnosticVirtualLinesOk*
+hl-DiagnosticVirtualLinesWarn	diagnostic.txt	/*hl-DiagnosticVirtualLinesWarn*
 hl-DiagnosticVirtualTextError	diagnostic.txt	/*hl-DiagnosticVirtualTextError*
 hl-DiagnosticVirtualTextHint	diagnostic.txt	/*hl-DiagnosticVirtualTextHint*
 hl-DiagnosticVirtualTextInfo	diagnostic.txt	/*hl-DiagnosticVirtualTextInfo*
@@ -7194,6 +7200,7 @@ lsp-notification	lsp.txt	/*lsp-notification*
 lsp-protocol	lsp.txt	/*lsp-protocol*
 lsp-quickstart	lsp.txt	/*lsp-quickstart*
 lsp-response	lsp.txt	/*lsp-response*
+lsp-root_dir()	lsp.txt	/*lsp-root_dir()*
 lsp-rpc	lsp.txt	/*lsp-rpc*
 lsp-semantic-highlight	lsp.txt	/*lsp-semantic-highlight*
 lsp-semantic_tokens	lsp.txt	/*lsp-semantic_tokens*
@@ -7314,16 +7321,15 @@ lua-module-load	lua.txt	/*lua-module-load*
 lua-modules	luaref.txt	/*lua-modules*
 lua-names	luaref.txt	/*lua-names*
 lua-nil	luaref.txt	/*lua-nil*
+lua-nongreedy	luaref.txt	/*lua-nongreedy*
 lua-not	luaref.txt	/*lua-not*
 lua-number	luaref.txt	/*lua-number*
 lua-numconstant	luaref.txt	/*lua-numconstant*
 lua-openlibs	luaref.txt	/*lua-openlibs*
 lua-options	lua.txt	/*lua-options*
 lua-or	luaref.txt	/*lua-or*
-lua-package-path	lua.txt	/*lua-package-path*
 lua-pattern	luaref.txt	/*lua-pattern*
 lua-patternitem	luaref.txt	/*lua-patternitem*
-lua-patterns	luaref.txt	/*lua-patterns*
 lua-precedence	luaref.txt	/*lua-precedence*
 lua-profile	lua.txt	/*lua-profile*
 lua-pseudoindex	luaref.txt	/*lua-pseudoindex*
@@ -8843,6 +8849,8 @@ startup-options	starting.txt	/*startup-options*
 startup-terminal	tui.txt	/*startup-terminal*
 startup-tui	tui.txt	/*startup-tui*
 state()	builtin.txt	/*state()*
+state-isolation	starting.txt	/*state-isolation*
+stateless	starting.txt	/*stateless*
 static-tag	tagsrch.txt	/*static-tag*
 status-line	windows.txt	/*status-line*
 statusmsg-variable	vvars.txt	/*statusmsg-variable*
@@ -10082,6 +10090,7 @@ vim.lsp.handlers.signature_help()	deprecated.txt	/*vim.lsp.handlers.signature_he
 vim.lsp.inlay_hint.enable()	lsp.txt	/*vim.lsp.inlay_hint.enable()*
 vim.lsp.inlay_hint.get()	lsp.txt	/*vim.lsp.inlay_hint.get()*
 vim.lsp.inlay_hint.is_enabled()	lsp.txt	/*vim.lsp.inlay_hint.is_enabled()*
+vim.lsp.is_enabled()	lsp.txt	/*vim.lsp.is_enabled()*
 vim.lsp.log.get_filename()	lsp.txt	/*vim.lsp.log.get_filename()*
 vim.lsp.log.get_level()	lsp.txt	/*vim.lsp.log.get_level()*
 vim.lsp.log.set_format_func()	lsp.txt	/*vim.lsp.log.set_format_func()*

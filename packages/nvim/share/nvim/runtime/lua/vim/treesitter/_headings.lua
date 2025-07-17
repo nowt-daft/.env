@@ -40,10 +40,6 @@ local heading_queries = {
   ]],
 }
 
-local function hash_tick(bufnr)
-  return tostring(vim.b[bufnr].changedtick)
-end
-
 ---@class TS.Heading
 ---@field bufnr integer
 ---@field lnum integer
@@ -53,7 +49,7 @@ end
 --- Extract headings from buffer
 --- @param bufnr integer buffer to extract headings from
 --- @return TS.Heading[]
-local get_headings = vim.func._memoize(hash_tick, function(bufnr)
+local get_headings = function(bufnr)
   local lang = ts.language.get_lang(vim.bo[bufnr].filetype)
   if not lang then
     return {}
@@ -85,11 +81,12 @@ local get_headings = vim.func._memoize(hash_tick, function(bufnr)
     end
   end
   return headings
-end)
+end
 
 --- Shows an Outline (table of contents) of the current buffer, in the loclist.
 function M.show_toc()
   local bufnr = api.nvim_get_current_buf()
+  local bufname = api.nvim_buf_get_name(bufnr)
   local headings = get_headings(bufnr)
   if #headings == 0 then
     return
@@ -106,6 +103,9 @@ function M.show_toc()
   vim.fn.setloclist(0, headings, ' ')
   vim.fn.setloclist(0, {}, 'a', { title = 'Table of contents' })
   vim.cmd.lopen()
+  vim.w.qf_toc = bufname
+  -- reload syntax file after setting qf_toc variable
+  vim.bo.filetype = 'qf'
 end
 
 --- Jump to section

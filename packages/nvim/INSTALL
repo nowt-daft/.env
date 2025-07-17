@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-sudo cp -R  bin/*    /usr/bin
-sudo cp -R  lib/*    /usr/lib
-sudo cp -R  share/*  /usr/share
+cp -R  bin/*    ~/.local/bin
+cp -R  lib/*    ~/.local/lib
+cp -R  share/*  ~/.local/share
 
+# TODO: Finish tweaks for launcher
 #cp nvim.desktop ~/.local/share/applications
 
+#sudo apt install -y neovim <- VERSION TOO OLD
 git clone https://github.com/NvChad/starter ~/.config/nvim
-

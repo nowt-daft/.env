@@ -184,14 +184,14 @@
 --- @field signs vim.fn.sign[]
 
 --- @class vim.fn.sign_place.dict
---- @field lnum? integer
+--- @field lnum? integer|string
 --- @field priority? integer
 
 --- @class vim.fn.sign_placelist.list.item
 --- @field buffer integer|string
 --- @field group? string
 --- @field id? integer
---- @field lnum integer
+--- @field lnum? integer|string
 --- @field name string
 --- @field priority? integer
 
@@ -297,3 +297,18 @@
 --- A list of dictionaries with information about
 --- undo blocks.
 --- @field entries vim.fn.undotree.entry[]
+
+--- @class vim.fn.winlayout.leaf
+--- @field [1] "leaf" Node type
+--- @field [2] integer winid
+
+--- @class vim.fn.winlayout.branch
+--- @field [1] "row" | "col" Node type
+--- @field [2] (vim.fn.winlayout.leaf|vim.fn.winlayout.branch)[] children
+
+--- @class vim.fn.winlayout.empty
+
+--- @alias vim.fn.winlayout.ret
+--- | vim.fn.winlayout.leaf
+--- | vim.fn.winlayout.branch
+--- | vim.fn.winlayout.empty

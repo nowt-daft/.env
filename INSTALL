@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ./includes/import
+IMPORT_DEBUG=true
+
+include set-env
+include ui

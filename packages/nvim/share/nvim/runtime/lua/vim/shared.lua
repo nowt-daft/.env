@@ -95,7 +95,7 @@ end
 ---
 --- @see |string.gmatch()|
 --- @see |vim.split()|
---- @see |lua-patterns|
+--- @see |lua-pattern|s
 --- @see https://www.lua.org/pil/20.2.html
 --- @see http://lua-users.org/wiki/StringLibraryTutorial
 ---
@@ -784,7 +784,7 @@ end
 
 --- Trim whitespace (Lua pattern "%s") from both sides of a string.
 ---
----@see |lua-patterns|
+---@see |lua-pattern|s
 ---@see https://www.lua.org/pil/20.2.html
 ---@param s string String to trim
 ---@return string String with whitespace removed from its beginning and end
@@ -793,7 +793,7 @@ function vim.trim(s)
   return s:match('^%s*(.*%S)') or ''
 end
 
---- Escapes magic chars in |lua-patterns|.
+--- Escapes magic chars in |lua-pattern|s.
 ---
 ---@see https://github.com/rxi/lume
 ---@param s string String to escape
@@ -854,7 +854,7 @@ do
   --- @param param_name string
   --- @param val any
   --- @param validator vim.validate.Validator
-  --- @param message? string
+  --- @param message? string "Expected" message
   --- @param allow_alias? boolean Allow short type names: 'n', 's', 't', 'b', 'f', 'c'
   --- @return string?
   local function is_valid(param_name, val, validator, message, allow_alias)
@@ -866,18 +866,18 @@ do
       end
 
       if not is_type(val, expected) then
-        return string.format('%s: expected %s, got %s', param_name, expected, type(val))
+        return ('%s: expected %s, got %s'):format(param_name, message or expected, type(val))
       end
     elseif vim.is_callable(validator) then
       -- Check user-provided validation function
       local valid, opt_msg = validator(val)
       if not valid then
-        local err_msg =
-          string.format('%s: expected %s, got %s', param_name, message or '?', tostring(val))
-
-        if opt_msg then
-          err_msg = string.format('%s. Info: %s', err_msg, opt_msg)
-        end
+        local err_msg = ('%s: expected %s, got %s'):format(
+          param_name,
+          message or '?',
+          tostring(val)
+        )
+        err_msg = opt_msg and ('%s. Info: %s'):format(err_msg, opt_msg) or err_msg
 
         return err_msg
       end

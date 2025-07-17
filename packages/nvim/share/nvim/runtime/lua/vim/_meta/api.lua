@@ -369,8 +369,11 @@ function vim.api.nvim_buf_get_extmark_by_id(buffer, ns_id, id, opts) end
 --- vim.api.nvim_buf_get_extmarks(0, my_ns, {0,0}, {-1,-1}, {})
 --- ```
 ---
---- If `end` is less than `start`, traversal works backwards. (Useful
---- with `limit`, to get the first marks prior to a given position.)
+--- If `end` is less than `start`, marks are returned in reverse order.
+--- (Useful with `limit`, to get the first marks prior to a given position.)
+---
+--- Note: For a reverse range, `limit` does not actually affect the traversed
+--- range, just how many marks are returned
 ---
 --- Note: when using extmark ranges (marks with a end_row/end_col position)
 --- the `overlap` option might be useful. Otherwise only the start position
@@ -939,8 +942,8 @@ function vim.api.nvim_create_augroup(name, opts) end
 --- - desc (string) optional: description (for documentation and troubleshooting).
 --- - callback (function|string) optional: Lua function (or Vimscript function name, if
 --- string) called when the event(s) is triggered. Lua callback can return a truthy
---- value (not `false` or `nil`) to delete the autocommand. Receives one argument,
---- a table with these keys: [event-args]()
+--- value (not `false` or `nil`) to delete the autocommand, and receives one argument, a
+--- table with these keys: [event-args]()
 ---     - id: (number) autocommand id
 ---     - event: (string) name of the triggered event `autocmd-events`
 ---     - group: (number|nil) autocommand group id, if any

@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+SETUP_FILE="composer-setup.php"
+
+php -r "copy('https://getcomposer.org/installer', '$SETUP_FILE');"
+
+EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '$SETUP_FILE');")"
+
+
+if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
+    >&2 echo 'ERROR: Invalid installer checksum'
+    rm $SETUP_FILE
+    exit 1
+fi
+
+php $SETUP_FILE --install-dir=$HOME/.local/bin/ --filename=composer
+
+RESULT=$?
+rm $SETUP_FILE
+exit $RESULT

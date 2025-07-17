@@ -2427,8 +2427,26 @@ local pattern = {
     ['^%.?gtkrc'] = starsetf('gtkrc'),
     ['/doc/.*%.txt$'] = function(_, bufnr)
       local line = M._getline(bufnr, -1)
-      local ml = line:find('^vim:') or line:find('%svim:')
-      if ml and M._matchregex(line:sub(ml), [[\<\(ft\|filetype\)=help\>]]) then
+      if
+        M._findany(line, {
+          '^vim:ft=help[:%s]',
+          '^vim:ft=help$',
+          '^vim:filetype=help[:%s]',
+          '^vim:filetype=help$',
+          '^vim:.*[:%s]ft=help[:%s]',
+          '^vim:.*[:%s]ft=help$',
+          '^vim:.*[:%s]filetype=help[:%s]',
+          '^vim:.*[:%s]filetype=help$',
+          '%svim:ft=help[:%s]',
+          '%svim:ft=help$',
+          '%svim:filetype=help[:%s]',
+          '%svim:filetype=help$',
+          '%svim:.*[:%s]ft=help[:%s]',
+          '%svim:.*[:%s]ft=help$',
+          '%svim:.*[:%s]filetype=help[:%s]',
+          '%svim:.*[:%s]filetype=help$',
+        })
+      then
         return 'help'
       end
     end,
@@ -2587,7 +2605,7 @@ end
 --- Filetype mappings can be added either by extension or by filename (either
 --- the "tail" or the full file path). The full file path is checked first,
 --- followed by the file name. If a match is not found using the filename, then
---- the filename is matched against the list of |lua-patterns| (sorted by priority)
+--- the filename is matched against the list of |lua-pattern|s (sorted by priority)
 --- until a match is found. Lastly, if pattern matching does not find a
 --- filetype, then the file extension is used.
 ---
