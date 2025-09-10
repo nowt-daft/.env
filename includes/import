@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-IMPORT_DEBUG=false
-
 function __find_root {
 	local DIR=${1:-$PWD}
 

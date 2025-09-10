@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+TYPE=$1
+NAME=$2
+
+if ! [ $TYPE ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: script <type?> <name>"
+	echo "  • <type> is any installed interpreter"
+	echo "  • default is 'bash'"
+	exit 1
+fi
+
+if ! [ $NAME ]; then
+	NAME=$TYPE
+	TYPE="bash"
+fi
+
+echo "💎 Generating $TYPE script"
+echo "📂 $PWD/$NAME"
+
+echo "#!/usr/bin/env $TYPE
+" | cat > $NAME
+
+chmod +x $NAME
+
+echo "✔ DONE."

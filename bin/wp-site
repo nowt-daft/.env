@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+NAME=$1
+
+if ! [ $NAME ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: wp-site <name> <web-port=1337> <sql-port=3306>"
+	echo "sql-port can also be assigned \"remote\""
+	exit 1
+fi
+
+DIR=$HOME/src/wp-sites/$NAME
+
+WEB_PORT=${2:-8080}
+SQL_PORT=${3:-3306}
+
+echo
+echo "✨ Generating Wordpress Website \"$NAME\""
+echo
+echo "🌍 http://localhost:$WEB_PORT"
+echo "💾 MYSQL @ $SQL_PORT"
+echo "📂 $DIR"
+sleep 2s
+
+mkdir -p $DIR
+cd $DIR
+
+GITIGNORE="
+.env
+"
+
+ENV_FILE="
+MYSQL_DATABASE=wp_db
+MYSQL_USER=wp_user
+MYSQL_PASSWORD=wp_user_password
+MYSQL_ROOT_PASSWORD=wp_root_password
+MYSQL_HOST=database:$SQL_PORT
+WORDPRESS_TABLE_PREFIX=wpav_
+"
+
+if [ $SQL_PORT = 'remote' ]; then
+DOCKER_FILE="
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - $WEB_PORT:80
+    environment:
+      WORDPRESS_DB_HOST: '\${MYSQL_HOST}'
+      WORDPRESS_DB_NAME: '\${MYSQL_DATABASE}'
+      WORDPRESS_DB_USER: '\${MYSQL_USER}'
+      WORDPRESS_DB_PASSWORD: '\${MYSQL_PASSWORD}'
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+"
+else
+DOCKER_FILE="
+services:
+  wordpress:
+    depends_on:
+      - database
+    image: wordpress
+    ports:
+      - $WEB_PORT:80
+    environment:
+      WORDPRESS_DB_HOST: '\${MYSQL_HOST}'
+      WORDPRESS_DB_NAME: '\${MYSQL_DATABASE}'
+      WORDPRESS_DB_USER: '\${MYSQL_USER}'
+      WORDPRESS_DB_PASSWORD: '\${MYSQL_PASSWORD}'
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+
+  database:
+    image: mysql:latest
+    ports:
+      - $SQL_PORT:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: '\${MYSQL_ROOT_PASSWORD}'
+      MYSQL_DATABASE: '\${MYSQL_DATABASE}'
+      MYSQL_USER: '\${MYSQL_USER}'
+      MYSQL_PASSWORD: '\${MYSQL_PASSWORD}'
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+"
+fi
+
+echo "$GITIGNORE" | cat > ".gitignore"
+echo "$ENV_FILE" | cat > ".env"
+echo "$ENV_FILE" | cat > ".env.example"
+echo "$DOCKER_FILE" | cat > "docker-compose.yml"
+
+if [ $SQL_PORT = 'remote' ]; then
+	echo "🖉 Edit the .env file to point to your remote SQL server."
+	echo "Then run:"
+	echo "  🗲 sudo docker compose up"
+	exit
+fi
+
+sudo docker compose up
+# THIS NEEDS MOVED TO ANOTHER SPOT...
+# composer global require \
+# 	php-stubs/wordpress-globals \
+# 	php-stubs/wordpress-stubs \
+# 	php-stubs/woocommerce-stubs \
+# 	php-stubs/acf-pro-stubs \
+# 	wpsyntex/polylang-stubs \
+# 	php-stubs/genesis-stubs \
+# 	php-stubs/wp-cli-stubs
+

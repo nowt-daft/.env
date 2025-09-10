@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+NAME=$1
+
+function php {
+	local CONTENT="$1"
+	echo \
+"<?php
+$CONTENT
+"
+}
+
+function php-plugin {
+	local CONTENT="$1"
+	echo \
+"$(php "
+/*
+ * Plugin Name:    $NAME
+ * Author:         Graham Robertson
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( is_admin() ) {
+	require_once __DIR__ . '/admin/$NAME.php';
+} else {
+	require_once __DIR__ . '/public/$NAME.php'
+}
+
+register_activation_hook( __FILE__, function() {
+	/* IMPLEMENT */
+});
+register_deactivation_hook( __FILE__, function() {
+	/* IMPLEMENT */
+});
+
+require plugin_dir_path( __FILE__ ) . 'includes/$NAME.php';
+
+$CONTENT
+")"
+}
+
+if ! [ $NAME ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: wp-plugin <name>"
+	exit 1
+fi
+
+if [ -f .env ] && \
+	[ -f docker-compose.yml ] && \
+	[ -d wp-content ]; then
+	echo "✨ GENERATING WORDPRESS PLUGIN <$NAME>"
+	echo "📂 $PWD/wp-content/plugins/$NAME"
+
+	cd wp-content/plugins/
+	mkdir $NAME && cd $NAME
+
+	mkdir -p admin/css
+	mkdir -p admin/js
+	mkdir -p admin/img
+
+	touch admin/$NAME.php
+	echo "$(php)" | cat > admin/$NAME.php
+
+	mkdir -p public/css
+	mkdir -p public/js
+	mkdir -p public/img
+
+	touch public/$NAME.php
+	echo "$(php)" | cat > public/$NAME.php
+
+	mkdir -p includes/
+	touch includes/$NAME.php
+
+	echo "$(php)" | cat > includes/$NAME.php
+
+	touch $NAME.php
+	touch uninstall.php
+
+	echo "$(php-plugin)" | cat > $NAME.php
+	echo "$(php)" | cat > uninstall.php
+
+	echo "✔ DONE."
+	exit 0
+fi
+
+echo "💀 Call this command from the root a Wordpress site"
+exit 1

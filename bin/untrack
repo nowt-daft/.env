@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+FILE=$1
+
+if ! [ $FILE ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: untrack <filename>"
+	exit 1
+fi
+
+git rm --cached $FILE

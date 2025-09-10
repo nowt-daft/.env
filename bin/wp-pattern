@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+source $HOME/includes/bubble
+
+NAME=$1
+CATS=$2
+
+function is_wp_theme {
+	if [ -f style.css ] && \
+		[ -f theme.json ] && \
+		[ -d templates ] && \
+		[ -f templates/index.html ]; then
+		return 0
+	fi
+	return 1
+}
+
+ROOT=$(bubble is_wp_theme)
+
+if ! [ $ROOT ]; then
+	echo "💀 This Script must be called from WITHIN a Wordpress theme."
+	exit 1
+fi
+
+if ! [ $NAME ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: wp-pattern <name> <cat1,cat2,...catn?>"
+	exit 1
+fi
+
+PATTERN_DIR=$ROOT/patterns
+FILE=$PATTERN_DIR/$NAME.php
+CONTENT="<?php
+/**
+ * Title:       $NAME
+ * Slug:        `basename $PWD`/$NAME
+ * Categories:  $CATS
+ * Description: $NAME pattern
+*/
+?>
+<span>Hello, World.</span>
+"
+
+echo "✨ GENERATING WORDPRESS PATTERN <$NAME>"
+echo "📂 $FILE"
+
+mkdir -p $PATTERN_DIR
+touch    $FILE
+
+echo "$CONTENT" | cat > $FILE
+

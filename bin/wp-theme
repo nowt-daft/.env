@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+function php {
+	local CONTENT="$1"
+	echo \
+"<?php
+$CONTENT
+"
+}
+
+NAME=$1
+
+STYLE_CONTENT="
+/**
+Theme Name: $NAME
+*/
+"
+
+THEME_CONTENT="
+{
+	"\$schema": "https://schemas.wp.org/wp/6.7/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"useRootPaddingAwareAlignments": true,
+		"color": {
+			"defaultDuotone": false,
+			"defaultGradients": false,
+			"defaultPalette": false,
+			"palette": []
+		},
+		"layout": {
+			"contentSize": "720px",
+			"wideSize": "1280px"
+		},
+		"spacing": {
+			"defaultSpacingSizes": false,
+			"spacingSizes": [],
+			"units": [
+				"%",
+				"px",
+				"em",
+				"rem",
+				"vh",
+				"vw"
+			]
+		},
+		"typography": {
+			"writingMode": true,
+			"defaultFontSizes": false,
+			"fluid": true,
+			"fontSizes": [],
+			"fontFamilies": []
+		},
+		"background": {},
+		"dimensions": {}
+	},
+	"styles": {
+		"color": {},
+		"spacing": {},
+		"typography": {},
+		"blocks": {},
+		"elements": {},
+		"css": ""
+	},
+	"templateParts": [],
+	"customTemplates": [],
+	"blockTypes": []
+}
+"
+
+if ! [ $NAME ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: wp-theme <name>"
+	exit 1
+fi
+
+if [ -f .env ] && \
+	[ -f docker-compose.yml ] && \
+	[ -d wp-content ]; then
+	echo "✨ GENERATING WORDPRESS THEME <$NAME>"
+	echo "📂 $PWD/wp-content/themes/$NAME"
+
+	cd wp-content/themes/
+	mkdir $NAME && cd $NAME
+	
+	mkdir -p assets/css
+	mkdir -p assets/fonts
+	mkdir -p assets/img
+	mkdir -p assets/js
+	
+	mkdir parts/
+	touch parts/footer.html
+	touch parts/header.html
+	touch parts/menu.html
+
+	mkdir patterns/
+	mkdir includes/
+	
+	mkdir styles/
+	touch styles/dark.json
+	touch styles/light.json
+
+	mkdir templates/
+	touch templates/index.html
+	touch templates/home.html
+	touch templates/404.html
+	touch templates/page.html
+	touch templates/single.html
+
+	touch functions.php
+	echo "$(php)" | cat > functions.php
+	
+	touch readme.txt
+	
+	touch style.css
+	echo "$STYLE_CONTENT" | cat > style.css
+
+	touch theme.json
+	echo "$THEME_CONTENT" | cat > theme.json
+
+	echo "✔ DONE."
+	exit 0
+fi
+
+echo "💀 Call this command from the root a Wordpress site"
+exit 1

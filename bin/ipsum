@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+MODE=$1
+LOWER=$2
+UPPER=$3
+
+if ! [ $MODE ]; then
+	echo "💀 MISSING ARGUMENT."
+	echo
+	echo "USAGE: ipsum <mode> <lower-bound?> <upper-bound?>"
+	echo "  where mode is sentence, paragraph, or page"
+	exit 1
+fi
+
+source ~/includes/rand
+
+if ! [ $UPPER ]; then
+	UPPER=$LOWER
+fi
+
+if [ $MODE = "sentence" ]; then
+	rand-sentence $LOWER $UPPER
+elif [ $MODE = "paragraph" ]; then
+	rand-paragraph $LOWER $UPPER
+elif [ $MODE = "page "]; then
+	echo "💀 NOT YET IMPLEMENTED"
+fi
+
+
