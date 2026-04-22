@@ -77,6 +77,7 @@ import   ~/.path
 import   ~/.bash_aliases
 
 include completions
+include mk
 
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
