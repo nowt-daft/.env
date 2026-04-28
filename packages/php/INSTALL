@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+source $HOME/includes/bashstrap
+include commands
+
+sudo $(installer) install php-cli
+
 SETUP_FILE="composer-setup.php"
 
 php -r "copy('https://getcomposer.org/installer', '$SETUP_FILE');"

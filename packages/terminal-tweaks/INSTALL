@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+source $HOME/includes/bashstrap
+include commands
+
+# Gnome Terminal Theme -> WE DON'T REALLY USE THIS ANYMORE... unnecessary
+#bash -c "$(wget -qO- https://git.io/vQgMr)"
+
+# Install Prompt for BASH
+curl -sS https://starship.rs/install.sh | sh
+
+# Toilet?
+sudo $(installer) install toilet

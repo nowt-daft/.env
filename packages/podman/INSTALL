@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source $HOME/includes/bashstrap
+include commands
+
+pkg=$(installer)
+sudo $pkg install podman podman-compose

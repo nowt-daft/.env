@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+source $HOME/includes/bashstrap
+include mk
+
+CMDS="list create add remove" # ANY MORE NEEDED?
+PKGS=$HOME/packages
+
+cmd=${1:-list}
+shift
+
+if ! [[ $CMDS = *$cmd* ]]; then
+	echo "💀 $cmd is not a known command"
+	echo "COMMANDS: $CMDS"
+	exit 1
+fi
+
+function list {
+	search="$@"
+	if [ -z $search ]; then
+		echo "🗃️ Available Packages:"
+		ls $PKGS
+		exit 0
+	fi
+	echo "🔧 TODO: IMPLEMENT SEARCH FEATURE..."
+}
+
+function create {
+	echo "📁 Creating directory → $PKGS/$1"
+	mkcd $PKGS/$1
+	script INSTALL
+}
+
+function add {
+	pkg=$1
+	if ! [ -d $PKGS/$pkg ]; then
+		echo "🫣 Package $pkg does NOT exist."
+		exit 1
+	fi
+	echo "📥 Running INSTALL script for $pkg"
+	echo "⊨======================================="
+	cd $PKGS/$pkg
+	if ./INSTALL; then
+		echo "⊨======================================="
+		echo "✔️  DONE."
+	else
+		echo "⊨======================================="
+		echo "❌ DONE."
+	fi
+}
+
+function remove {
+	echo "🔧 TODO: IMPLENT THE CALL OF UNINSTALL SCRIPT"
+}
+
+echo "🚀 app $cmd $@"
+$cmd $@

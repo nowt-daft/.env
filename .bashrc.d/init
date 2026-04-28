@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+source   ~/includes/bashstrap
+
+import   ~/.path
+import   ~/.aliases
+import   ~/.completions
+
+include  mk
+
+eval "$(starship init bash)"
+
+echo
+toilet -f pagga $USER

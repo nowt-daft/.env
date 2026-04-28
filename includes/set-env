@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-function set-env {
-	set -o allexport
-	import ${1:-".env"} || ${2:-".env.default"}
-	set +o allexport
-}

@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-source ./includes/import
-IMPORT_DEBUG=true
+ln -sf  $PWD/bin           ~/bin
+ln -sf  $PWD/includes      ~/includes
+ln -sf  $PWD/packages      ~/packages
+ln -sf  $PWD/.bashrc.d     ~/.bashrc.d
 
-include set-env
-include ui
+ln -sf  $PWD/.env          ~/.env
+ln -sf  $PWD/.path         ~/.path  # <- THIS NEEDS TO BE A FILE OF LINES...
+ln -sf  $PWD/.aliases      ~/.aliases
+ln -sf  $PWD/.completions  ~/.completions
+

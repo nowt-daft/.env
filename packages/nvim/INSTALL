@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 
-cp -R  bin/*    ~/.local/bin
-cp -R  lib/*    ~/.local/lib
-cp -R  share/*  ~/.local/share
+NAME=nvim-linux-x86_64
 
-# TODO: Finish tweaks for launcher
+if ! [ -d $NAME]; then
+	tar xzvf $NAME.tar.gz
+fi
+
+mkdir -p ~/.local/bin
+mkdir -p ~/.local/share
+mkdir -p ~/.local/lib
+mkdir -p ~/.config/nvim
+
+cp -R  $NAME/bin/*    ~/.local/bin
+cp -R  $NAME/lib/*    ~/.local/lib
+cp -R  $NAME/share/*  ~/.local/share
+
+cp -R .config/nvim/*  ~/.config/nvim
+
 #cp nvim.desktop ~/.local/share/applications
-
-#sudo apt install -y neovim <- VERSION TOO OLD
-git clone https://github.com/NvChad/starter ~/.config/nvim
+git clone https://github.com/NvChad/starter default-config
