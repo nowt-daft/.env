@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
-source   ~/includes/bashstrap
+source   ~/.bashstrap
 
-import   ~/.path
 import   ~/.aliases
 import   ~/.completions
-
-include  mk
 
 eval "$(starship init bash)"
 

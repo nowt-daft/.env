@@ -1,20 +1,11 @@
 #!/usr/bin/env bash
 
-function __script {
-	COMPREPLY=( $( \
-		compgen -W \
-			"bash python php bun node lua" -- \
-			${COMP_WORDS[1]} \
-		) )
-}
-
-function __ipsum {
-	COMPREPLY=( $( \
-		compgen -W \
-			"sentence paragraph page" -- \
-			${COMP_WORDS[1]} \
-		) )
-}
-
-complete -F __script  script
-complete -F __ipsum   ipsum
+# SHOULD WE HAVE COMPLETIONS IN A PROJECT?
+# YES.
+# TODO: Add completions to sub-shell environments!
+if [ -d $ROOT/.completions.d ]; then
+	for script_name in $(ls $ROOT/.completions.d); do
+		source $ROOT/.completions.d/$script_name
+		complete -F "__$script_name" $script_name
+	done
+fi

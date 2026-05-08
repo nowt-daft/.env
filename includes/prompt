@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+import print
+
+function prompt::input {
+	local LABEL=$1
+	if ! read -p "$(\
+		print --bold --inverse --grey " $LABEL: " && \
+		print " " \
+	)" response; then
+		return 1
+	fi
+	echo "$response"
+}
+
+function prompt::confirm {
+	local QUESTION=$1
+	if ! read -p "$(\
+		print --bold --inverse --orange " ⚠ $QUESTION " && print " [y|n]: ")" response; then
+		return 1
+	fi
+	case $response in
+		y*) return 0;;
+		*) return 1;;
+	esac
+}

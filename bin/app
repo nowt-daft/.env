@@ -1,57 +1,75 @@
 #!/usr/bin/env bash
 
-source $HOME/includes/bashstrap
-include mk
+source $BASHSTRAP
+include sys
+include print
 
-CMDS="list create add remove" # ANY MORE NEEDED?
+CMDS="list create add remove"
 PKGS=$HOME/packages
 
 cmd=${1:-list}
 shift
 
 if ! [[ $CMDS = *$cmd* ]]; then
-	echo "💀 $cmd is not a known command"
-	echo "COMMANDS: $CMDS"
+	print::hr
+	print::error "💀 $cmd is not a known command"
+	print::info "COMMANDS: $CMDS"
+	print::hr
+	print::bad-exit
 	exit 1
 fi
+
+print::hr
 
 function list {
 	search="$@"
 	if [ -z $search ]; then
-		echo "🗃️ Available Packages:"
-		ls $PKGS
-		exit 0
+		print::info "🗃️ Available Packages:"
+		print::hr
+		print::list $(ls $PKGS)
+		return 0
 	fi
-	echo "🔧 TODO: IMPLEMENT SEARCH FEATURE..."
+	print::error "🔧 TODO: IMPLEMENT SEARCH FEATURE..."
+	return 1
 }
 
 function create {
 	echo "📁 Creating directory → $PKGS/$1"
-	mkcd $PKGS/$1
+	sys::mkdir::cd $PKGS/$1
 	script INSTALL
 }
 
 function add {
 	pkg=$1
 	if ! [ -d $PKGS/$pkg ]; then
-		echo "🫣 Package $pkg does NOT exist."
-		exit 1
+		print::error "🫣 Package $pkg does NOT exist."
+		return 1
 	fi
-	echo "📥 Running INSTALL script for $pkg"
-	echo "⊨======================================="
+	println "📥 Running INSTALL script for $pkg"
+	print::hr =
 	cd $PKGS/$pkg
 	if ./INSTALL; then
-		echo "⊨======================================="
-		echo "✔️  DONE."
+		print::hr =
+		print::ok
 	else
-		echo "⊨======================================="
-		echo "❌ DONE."
+		print::hr x
+		print::error "INSTALL script failed."
+		return 2
 	fi
 }
 
 function remove {
-	echo "🔧 TODO: IMPLENT THE CALL OF UNINSTALL SCRIPT"
+	print::error \
+		"🔧 TODO: IMPLENT THE CALL OF UNINSTALL SCRIPT"
 }
 
 echo "🚀 app $cmd $@"
-$cmd $@
+print::hr
+if $cmd $@; then
+	print::hr
+	print::done
+	exit
+fi
+print::hr
+print::bad-exit $?
+exit 10

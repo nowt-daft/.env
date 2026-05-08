@@ -1,0 +1,39 @@
+*
+
+# THIS
+!.gitignore
+
+# CONFIG
+!.env.vars
+!.env.example
+!docker-compose.yml
+
+# SCRIPTS
+!INIT
+!RUN
+!WP
+
+# MORE SCRIPTS
+!bin/
+!bin/*
+
+# EVENT MORE SCRIPTS
+!includes
+!includes/*
+!includes/**/*
+
+# DOCUMENTATION
+!README.md
+!docs/
+!docs/*
+!docs/**/*
+
+# WEBSITE SOURCE CODE
+!wp-content/
+!wp-content/*
+!wp-content/**/*
+
+# DATABASE MIGRATION SCRIPT
+!database/
+!database/initdb.d/
+!database/initdb.d/*

@@ -1,24 +1,30 @@
 #!/usr/bin/env bash
 
 source $HOME/includes/bashstrap
-include commands
+include sys
 
-if ! has kitty; then
-	echo "💾 DOWNLOADING KITTY..."
-	sudo $(installer) install kitty
+if ! sys::has kitty; then
+	print::info "💾 DOWNLOADING KITTY..."
+	sudo $(sys::install) kitty
 fi
 
-mkdir -p ~/.config/kitty
+sys::mkdir ~/.config/kitty
 
 if ! [ -d ~/.config/kitty/kitty-themes ]; then
-	echo "🖌  DOWNLOADING THEMES..."
+	print::info "🖌  DOWNLOADING THEMES..."
 	git clone \
 		https://github.com/dexpota/kitty-themes.git \
 		~/.config/kitty/kitty-themes
 fi
 
-cp -f kitty.conf ~/.config/kitty
-cp -f theme.conf ~/.config/kitty
+ln -s kitty.conf ~/.config/kitty
+ln -s theme.conf ~/.config/kitty
 
-gsettings set org.gnome.desktop.default-applications.terminal exec 'kitty'
-echo 'kitty.desktop' > ~/.config/xdg-terminals.list
+if sys::has gsettings; then
+	gsettings \
+		set \
+		org.gnome.desktop.default-applications.terminal \
+		exec \
+		'kitty'
+	echo 'kitty.desktop' > ~/.config/xdg-terminals.list
+fi

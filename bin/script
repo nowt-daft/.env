@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
+source $BASHSTRAP
+include print
+
 TYPE=$1
 NAME=$2
 
 if ! [ $TYPE ]; then
-	echo "💀 MISSING ARGUMENT."
-	echo
-	echo "USAGE: script <type?> <name>"
-	echo "  • <type> is any installed interpreter"
-	echo "  • default is 'bash'"
+	print::hr
+	print::error "MISSING ARGUMENT"
+	print::hr
+	print::warning "USAGE: script <type?> <name>"
+	print::warning "  type is any installed interpreter"
+	print::warning "  type default is bash"
 	exit 1
 fi
 
@@ -17,12 +21,16 @@ if ! [ $NAME ]; then
 	TYPE="bash"
 fi
 
-echo "💎 Generating $TYPE script"
-echo "📂 $PWD/$NAME"
+print::hr +
+print::log "💎 Generating $TYPE script"
 
-echo "#!/usr/bin/env $TYPE
-" | cat > $NAME
+if ! echo -e "#!/usr/bin/env $TYPE\n" | cat > $NAME; then
+	print::error "Unable to save -> 📂 $PWD/$NAME"
+	print::bad-exit 2
+	exit 2
+fi
 
 chmod +x $NAME
-
-echo "✔ DONE."
+print::ok "📂 $PWD/$NAME -> 📄 +x $NAME"
+print::hr
+print::done

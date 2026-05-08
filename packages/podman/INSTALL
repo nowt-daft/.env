@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
 source $HOME/includes/bashstrap
-include commands
+include sys
 
-pkg=$(installer)
-sudo $pkg install podman podman-compose
+sudo $(sys::install) podman podman-compose
+
+systemctl --user enable podman.socket
+systemctl --user start podman.socket
+systemctl --user status podman.socket
+
+sudo loginctl enable-linger $USER
+loginctl show-user $USER --property=Linger
+
+sudo systemctl enable podman.socket
+sudo systemctl start podman.socket
+sudo systemctl status podman.socket

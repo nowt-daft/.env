@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+mkdir -p database/data/
+
+# chown $USER  database/
+# chown $USER  wp-content/
+# chown $USER  .htaccess
+#
+# chmod -R 755 database/
+# chmod -R 755 wp-content/
+# chmod    644 .htaccess
+# chmod    777 .env
+
+if ! [ -f .env ]; then
+	VARS=`cat .env.vars`
+
+	touch .env
+	echo "Entering .env setup wizard:"
+
+	for line in $VARS; do
+		read -p "$line" answer
+		echo "$line$answer" >> .env
+	done
+
+	echo
+	echo "💾 .env generated and saved"
+fi
+
+echo "TODO: CREATE CONTAINERS WITHOUT WP-CONTENT/ VOLUME."
+echo "THEN RE-CREATE WITH WP-CONTENT/ VOLUME."
+echo "--> THIS WILL NEED SOME WORK."

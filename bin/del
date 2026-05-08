@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+source $BASHSTRAP
+include print
+include prompt
+
+TARGET=$1
+
+print::hr
+
+if [ -f $TARGET ]; then
+	if ! prompt::confirm "🗎 Delete file $TARGET?"; then
+		print::hr
+		println --muted --red --bold "[ABORT]"
+		exit
+	fi
+	if ! rm $TARGET; then
+		exit 1
+	fi
+elif [ -d $TARGET ]; then
+	if ! prompt::confirm "🗁  Delete directory $TARGET?"; then
+		print::hr
+		println --muted --red --bold "[ABORT]"
+		exit
+	fi
+	if ! rm -r $TARGET; then
+		exit 1
+	fi
+fi
+print::hr
+print::ok $(print --red "[DELETED]")

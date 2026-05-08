@@ -1,12 +1,59 @@
 #!/usr/bin/env bash
 
-ln -sf  $PWD/bin           ~/bin
-ln -sf  $PWD/includes      ~/includes
-ln -sf  $PWD/packages      ~/packages
-ln -sf  $PWD/.bashrc.d     ~/.bashrc.d
+function install::link {
+	local SOURCE=$1
+	local TARGET=${2:-$SOURCE}
+	if [ -d ~/$TARGET ]; then
+		echo "📁 ALREADY LINKED $PWD/$SOURCE -> ~/$TARGET"
+		return 0
+	fi
+	echo "🔗 LINKING $PWD/$SOURCE -> ~/$TARGET"
+	ln -fs $PWD/$SOURCE ~/$TARGET
+}
 
-ln -sf  $PWD/.env          ~/.env
-ln -sf  $PWD/.path         ~/.path  # <- THIS NEEDS TO BE A FILE OF LINES...
-ln -sf  $PWD/.aliases      ~/.aliases
-ln -sf  $PWD/.completions  ~/.completions
+function install::env-key-value {
+	local KEY=$1
+	local VALUE=$2
 
+	local ENV_FILE=~/.env
+	
+	if ! cat $ENV_FILE | grep $KEY=; then
+		echo "$KEY=$VALUE" >> $ENV_FILE
+	fi
+}
+
+# MAYBE MOVE THIS TO A FILE:
+INSTALL=(bin \
+	includes \
+	packages \
+	.bashrc.d \
+	.path.d \
+	.completions.d \
+	.bashstrap \
+	.env \
+	.path \
+	.aliases \
+	.completions)
+##
+
+for node in ${INSTALL[@]}; do
+	install::link $node
+done
+
+TEMPLATES_DIR=
+if [ -d ~/Templates ]; then
+	TEMPLATES_DIR=Templates
+
+	for dir in $(ls $PWD/templates); do
+		install::link templates/$dir Templates/$dir
+	done
+else
+	TEMPLATES_DIR=templates
+	install::link templates
+fi
+
+install::env-key-value "ROOT" "\$HOME"
+install::env-key-value "BASHSTRAP" "\$ROOT/.bashstrap"
+# install::env-key-value "PATH_DIR" "\$ROOT/.path.d"
+# install::env-key-value "INCLUDES_DIR" "\$ROOT/includes"
+install::env-key-value "TEMPLATES_DIR" "\$ROOT/$TEMPLATES_DIR"

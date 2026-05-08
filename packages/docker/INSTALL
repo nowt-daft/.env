@@ -1,38 +1,74 @@
 #!/usr/bin/env bash
 
-PKGS=$(sudo apt list --installed)
+source $HOME/includes/bashstrap
+include sys
+include print
 
-for pkg in \
-		docker.io \
-		docker-doc \
-		docker-compose \
-		docker-compose-v2 \
-		podman-docker \
-		containerd \
-		runc; do
-	if [ $(echo "$PKGS" | grep $pkg) ]; then
-		sudo apt remove -y $pkg
-	fi
-done
+if sys::has apt; then
+	PKGS=$(sudo apt list --installed)
 
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+	for pkg in \
+			docker.io \
+			docker-doc \
+			docker-compose \
+			docker-compose-v2 \
+			podman-docker \
+			containerd \
+			runc; do
+		if [ $(echo "$PKGS" | grep $pkg) ]; then
+			sudo apt remove -y $pkg
+		fi
+	done
 
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+	# Add Docker's official GPG key:
+	sudo apt-get update
+	sudo apt-get install ca-certificates curl
+	sudo install -m 0755 -d /etc/apt/keyrings
+	sudo curl \
+		-fsSL https://download.docker.com/linux/ubuntu/gpg \
+		-o /etc/apt/keyrings/docker.asc
+	sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-sudo apt install -y \
-	docker-ce \
-	docker-ce-cli \
-	containerd.io \
-	docker-buildx-plugin \
-	docker-compose-plugin \
-	libgda-5.0-mysql # <- used for MySQL support
+	# Add the repository to Apt sources:
+	echo \
+	  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+	  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+	  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+	sudo apt-get update
+
+	sudo apt install -y \
+		docker-ce \
+		docker-ce-cli \
+		containerd.io \
+		docker-buildx-plugin \
+		docker-compose-plugin \
+		libgda-5.0-mysql # <- used for MySQL support
+
+elif sys::has dnf; then
+	sudo dnf remove docker \
+		docker-client \
+		docker-client-latest \
+		docker-common \
+		docker-latest \
+		docker-latest-logrotate \
+		docker-logrotate \
+		docker-selinux \
+		docker-engine-selinux \
+		docker-engine
+
+	sudo dnf config-manager addrepo \
+		--from-repofile \
+		https://download.docker.com/linux/fedora/docker-ce.repo
+
+	sudo dnf install \
+		docker-ce \
+		docker-ce-cli \
+		containerd.io \
+		docker-buildx-plugin \
+		docker-compose-plugin
+	sudo systemctl enable --now docker
+else
+	print::error "💀 UNSUPPORTED SYSTEM."
+	exit 1
+fi
+

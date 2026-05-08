@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+function __script {
+	COMPREPLY=( $( \
+		compgen -W \
+			"bash python php bun node lua" -- \
+			${COMP_WORDS[1]} \
+		) )
+}
+

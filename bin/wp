@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+source $BASHSTRAP
+include print
+include template
+
+function wp::usage {
+	print::warning "USAGE: wp <site|theme|plugin|type|pattern|template> ..."
+}
+
+function wp::site {
+	local NAME=$1
+	local WP_PORT=$2
+	local SQL_PORT=$3
+
+	if [ -z $NAME ] || [ -z $WP_PORT ] || [ -z $SQL_PORT ]; then
+		wp::site::usage
+		return 1
+	fi
+
+	local DEST=$HOME/src/$NAME
+
+	declare -A info
+	info[🌍]="https://localhost:$WP_PORT"
+	info[🔌]="MYSQL @ $SQL_PORT"
+	info[📂]="$DEST"
+
+	println "✨ Generating Wordpress Website \"$NAME\""
+	print::table info
+	print::hr
+
+	template::directory::copy wp/site $DEST
+}
+
+function wp::site::usage {
+	print::warning "USAGE: wp site <name> <wp-port> <sql-port>"
+}
+
+function wp::theme {
+	print::info "TODO: IMPLEMENT THEME"
+}
+
+function wp::plugin {
+	print::info "TODO: IMPLEMENT PLUGIN"
+}
+
+function wp::type {
+	print::info "TODO: IMPLEMENT TYPE"
+}
+
+function wp::pattern {
+	print::info "TODO: IMPLEMENT PATTERN"
+}
+
+function wp::template {
+	print::info "TODO: IMPLEMENT TEMPLATE"
+}
+
+CMD=$1
+shift
+
+print::hr
+
+case $CMD in
+	site) wp::site $@ ;;
+	theme) wp::theme $@ ;;
+	plugin) wp::plugin $@;;
+	type) wp::type $@ ;;
+	pattern) wp::pattern $@ ;;
+	template) wp::template $@ ;;
+	*) wp::usage ;;
+esac
+
+STATUS=$?
+print::hr
+
+if [[ $STATUS -gt 0 ]]; then
+	print::bad-exit $STATUS
+	exit $STATUS
+fi
+print::done

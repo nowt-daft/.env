@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# SAME CODE AS .bashstrap
+# TODO: Change all code to use that instead
+# -> OR, just source .bashstrap here?
+
 function __find_root {
 	local DIR=${1:-$PWD}
 
@@ -7,7 +11,7 @@ function __find_root {
 		return 1
 	fi
 
-	if [ -d $DIR/includes ]; then
+	if [ -d $DIR/.bashstrap ]; then
 		echo $DIR
 		return 0
 	fi
@@ -24,15 +28,32 @@ function import {
 }
 
 function include {
-	local ROOT=$(__find_root)
-	local DIR=${ROOT:-$HOME}/includes
-	import $DIR/$1 || import $HOME/includes/$1
+	if [ -z $ROOT ]; then
+		export ROOT=$(__find_root)
+	fi
+	local INCLUDES_DIR=${ROOT:-$HOME}/includes
+	import $INCLUDES_DIR/$1 || import $HOME/includes/$1
 }
 
 function set-env {
+	local ENV_FILE=${1:-".env"}
+	local DEFAULT_FILE=${2:-".env.default"}
+
+	local ENV=
+	if [ -f $ENV_FILE ]; then
+		ENV=$ENV_FILE
+	elif [ -f $DEFAULT_FILE ]; then
+		ENV=$DEFAULT_FILE
+	else
+		return 1;
+	fi
+
 	set -o allexport
-	import ${1:-".env"} || import ${2:-".env.default"}
+	import $ENV
 	set +o allexport
 }
 
 set-env
+include print
+
+print::warning "[DEPRECATED] :: source \$BASHSTRAP :: use this instead"

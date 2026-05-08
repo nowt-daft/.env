@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function __ipsum {
+	COMPREPLY=( $( \
+		compgen -W \
+			"sentence paragraph page" -- \
+			${COMP_WORDS[1]} \
+		) )
+}

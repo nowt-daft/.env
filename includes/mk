@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-function mk {
-	mkdir -pv $1
-}
-
-function mkcd {
-	mkdir -pv $1 && cd $1
-}

@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
 source "$HOME/includes/bashstrap"
-include commands
+include sys
 
-if ! has git; then
-	"❌ git not installed."
-	system=$(installer)
-	sudo system install git
+if ! sys::has git; then
+	print::info "❌ git not installed."
+	sudo $(sys::install) git
 fi
 
 read -p "🏋  username: " USERNAME
@@ -16,3 +15,9 @@ git config --global \
 	user.name  $USERNAME
 git config --global \
 	user.email $EMAIL
+
+declare -A info
+info["USER"]=$USERNAME
+info["EMAIL"]=$EMAIL
+
+print::table info

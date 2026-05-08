@@ -1,0 +1,19 @@
+Host $NAME*
+	Hostname $HOST
+	User $USER
+	Port $PORT
+	IdentityFile $KEY_PATH
+	RequestTTY yes
+
+Host $NAME-prompt
+	RemoteCommand cd $SERVER_PATH; exec $SHELL;
+
+Host $NAME-status
+	RemoteCommand cd $SERVER_PATH; git status;
+
+Host $NAME-update
+	RemoteCommand cd $SERVER_PATH; git pull;
+
+Host $NAME-commit
+	RemoteCommand cd $SERVER_PATH; git pull; git status; git add . ; git commit -m livefix; git push;
+

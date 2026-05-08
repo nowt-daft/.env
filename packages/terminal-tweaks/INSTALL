@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source $HOME/includes/bashstrap
-include commands
+include sys
 
 # Gnome Terminal Theme -> WE DON'T REALLY USE THIS ANYMORE... unnecessary
 #bash -c "$(wget -qO- https://git.io/vQgMr)"
@@ -10,4 +10,4 @@ include commands
 curl -sS https://starship.rs/install.sh | sh
 
 # Toilet?
-sudo $(installer) install toilet
+sudo $(sys::install) toilet

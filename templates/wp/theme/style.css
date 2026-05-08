@@ -1,0 +1,27 @@
+/**
+Theme Name: $NAME
+Theme URI: $URI
+Author: $AUTHOR
+Author URI: $AUTHOR_URI
+Text Domain: $SAFE_NAME
+Description:
+Tags:
+*/
+:root {
+	/* COLORS */
+	/* SEMANTIC COLOURS */
+	/* FONTS AND SIZES */
+	/* PADDING/SPACING */
+}
+
+html {
+	box-sizing: border-box;
+	margin:0;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+	outline: none;
+}

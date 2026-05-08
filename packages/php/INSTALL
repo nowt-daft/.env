@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
 source $HOME/includes/bashstrap
-include commands
+include sys
 
-sudo $(installer) install php-cli
+sudo $(sys::install) php-cli
 
 SETUP_FILE="composer-setup.php"
 
@@ -23,4 +23,19 @@ php $SETUP_FILE --install-dir=$HOME/.local/bin/ --filename=composer
 
 RESULT=$?
 rm $SETUP_FILE
+
+if [[ $RESULT == 0 ]]; then
+	# https://github.com/php/php-src/tree/master/ext
+	composer global require \
+		phpstan/php-8-stubs \
+		php-stubs/wordpress-globals \
+		php-stubs/wordpress-stubs \
+		php-stubs/wordpress-tests-stubs \
+		php-stubs/woocommerce-stubs \
+		php-stubs/acf-pro-stubs \
+		php-stubs/genesis-stubs \
+		php-stubs/wp-cli-stubs \
+		wpsyntex/polylang-stubs \
+		stripe/stripe-php
+fi
 exit $RESULT
