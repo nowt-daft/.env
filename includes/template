@@ -24,11 +24,6 @@ function template::file::render {
 		return 3
 	fi
 
-	print::info "$PREFIX DATA -> $(print --muted $FILE)"
-	print::hr
-	print::table $DATA
-	print::hr
-
 	for key in ${!DATA[@]}; do
 		if ! sed -i "s|$key|${DATA[$key]}|g" $FILE; then
 			print::error "$PREFIX [ABORTED] $FILE"
@@ -76,7 +71,7 @@ function template::file {
 	if ! template::file::copy $SRCE $DEST; then
 		print::error "$PREFIX [FAILED COPY] $SRCE -> $DEST"
 	fi
-	if ! template::file::render $DEST $DATA; then
+	if ! template::file::render $DEST DATA; then
 		print::error "$PREFIX [FAILED RENDER] $DEST"
 	fi
 
@@ -85,7 +80,7 @@ function template::file {
 }
 
 function template::directory::create {
-	local PREFIX="🗁  DIRECTORY CREATE -> "
+	local PREFIX="🗁  DIRECTORY CREATE ->"
 	local DIR=$1
 	if ! sys::mkdir $DIR; then
 		print::error "$PREFIX [FAILED] $DIR"
@@ -95,7 +90,7 @@ function template::directory::create {
 }
 
 function template::directory::copy {
-	local PREFIX="🗁  TEMPLATE DIRECTORY -> "
+	local PREFIX="🗁  TEMPLATE DIRECTORY ->"
 
 	local SRCE=$1
 	local DEST=$2
@@ -110,14 +105,13 @@ function template::directory::copy {
 
 	if ! [ -d $DEST ]; then
 		print::hr
-		# print::info "$INDENT $PREFIX [CREATING] $DEST"
 		if ! template::directory::create $DEST; then
 			print::error "$INDENT $PREFIX [CREATION FAILED] $DEST"
 			return 2
 		fi
 	fi
 
-	print::hr
+	# print::hr
 	# println --muted "$INDENT $PREFIX $SRCE -> $DEST"
 
 	for node in $(sys::ls $TEMPLATES_DIR/$SRCE); do

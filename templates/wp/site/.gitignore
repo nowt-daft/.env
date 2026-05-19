@@ -4,14 +4,18 @@
 !.gitignore
 
 # CONFIG
+!.rc
+!.htaccess
 !.env.vars
 !.env.example
-!docker-compose.yml
+!compose.yml
+!init-compose.yml
 
 # SCRIPTS
 !INIT
-!RUN
-!WP
+!INIT_SERVER
+!INSTALL_KEY
+!SHELL
 
 # MORE SCRIPTS
 !bin/
@@ -36,4 +40,4 @@
 # DATABASE MIGRATION SCRIPT
 !database/
 !database/initdb.d/
-!database/initdb.d/*
+!database/initdb.d/migrate.sh

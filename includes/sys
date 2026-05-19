@@ -27,7 +27,7 @@ function sys::mkdir {
 		print::error "🗁  [MKDIR] $1"
 		return 1
 	fi
-	# print::ok "🗁  [CREATED] $1"
+	print::ok "🗁  [CREATED] $(print --muted "$1")"
 }
 
 function sys::mkdir::cd {
@@ -43,7 +43,7 @@ function sys::copy {
 		print::error "🗐  [COPY] $1 -> $2"
 		return 1
 	fi
-	# print::ok "🗐  [COPIED] $1 -> $2"
+	print::ok "🗐  [COPIED] $(print --muted "$(basename $1) -> $(basename $2)")"
 }
 
 function sys::ls {
@@ -73,5 +73,32 @@ function sys::file::append {
 	touch $FILE
 	if ! sys::file::contains $FILE "$LINE"; then
 		echo "$LINE" >> $FILE
+	fi
+}
+
+function sys::file::set {
+	local FILE=$1
+	local KEY=$2
+	local VALUE=$3
+
+	if sys::file::contains $FILE "$KEY="; then
+		if ! sed -i "s|$KEY=.*|$KEY=$VALUE|g" $FILE; then
+			return 1
+		fi
+	else
+		echo "$KEY=$VALUE" >> $FILE
+	fi
+}
+
+function sys::file::set::uncomment {
+	local FILE=$1
+	local KEY=$2
+
+	if sys::file::contains $FILE "#$KEY="; then
+		if ! sed -i "s|^#$KEY=|$KEY=|g" $FILE; then
+			return 1
+		fi
+	else
+		echo "$KEY=" >> $FILE
 	fi
 }

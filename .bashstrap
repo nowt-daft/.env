@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+declare -A __IMPORTED__
+
 function __find_root {
 	local DIR=${1:-$PWD}
 
@@ -16,11 +18,16 @@ function __find_root {
 }
 
 function import {
-	if [ -f $1 ]; then
-		source $1
-		return 0
+	if ! [ -f $1 ]; then
+		return 1
 	fi
-	return 1
+
+	# if [[ ${__IMPORTED__[$1]} == true ]]; then
+	# 	return 0
+	# fi
+	#
+	# __IMPORTED__[$1]=true
+	source $1
 }
 
 function include {

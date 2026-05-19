@@ -6,12 +6,15 @@ services:
     ports:
       - $WP_PORT:80
     environment:
-      WORDPRESS_DB_HOST: $MYSQL_HOST
+      WORDPRESS_DB_HOST: database:3306
       WORDPRESS_DB_NAME: $MYSQL_DATABASE
       WORDPRESS_DB_USER: $MYSQL_USER
       WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
+      WORDPRESS_DEBUG: $WP_DEBUG
+      # WORDPRESS_TABLE_PREFIX: $WP_TABLE_PREFIX
     volumes:
-      - ./wp-content:/var/www/html/wp-content
+      - ./wp-content:/var/www/html/wp-content:z
+      - .htaccess:/var/www/html/.htaccess:z
 
   database:
     image: mysql:latest
@@ -22,6 +25,9 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
+      DEV_URL: $DEV_URL
+      PRODUCTION_URL: $PRODUCTION_URL
+      # WORDPRESS_TABLE_PREFIX: $WP_TABLE_PREFIX
     volumes:
-      - ./database/data:/var/lib/mysql
-      - ./database/initdb.d:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/mysql:z
+      # - ./database/initdb.d:/docker-entrypoint-initdb.d:z

@@ -41,9 +41,14 @@ function create {
 
 function add {
 	pkg=$1
+	if [ -z $pks ]; then
+		print::error "[MISSING] Not enough arguments"
+		print::info "COMMANDS: $CMDS"
+		return 1
+	fi
 	if ! [ -d $PKGS/$pkg ]; then
 		print::error "🫣 Package $pkg does NOT exist."
-		return 1
+		return 2
 	fi
 	println "📥 Running INSTALL script for $pkg"
 	print::hr =
@@ -54,7 +59,7 @@ function add {
 	else
 		print::hr x
 		print::error "INSTALL script failed."
-		return 2
+		return 3
 	fi
 }
 
@@ -63,7 +68,9 @@ function remove {
 		"🔧 TODO: IMPLENT THE CALL OF UNINSTALL SCRIPT"
 }
 
-echo "🚀 app $cmd $@"
+toilet -f pagga GRAHAMs PKGs
+print::hr =
+println --muted $cmd $@
 print::hr
 if $cmd $@; then
 	print::hr

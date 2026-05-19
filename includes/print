@@ -158,3 +158,22 @@ function print::hr {
 	fi
 	println --muted "$(print::repeat $size $char)"
 }
+
+function print::erase-line {
+	printf "\e[1G\e[0K"
+}
+
+function print::countdown {
+	local TIME=$1
+	local MSG=$2
+
+	if [[ $TIME -eq 0 ]] || [[ $TIME -lt 0 ]]; then
+		printf "\n"
+		return
+	fi
+
+	print --bold --inverse --lime " ⏲️ $TIME $(print " $MSG")"
+	sleep 1
+	print::erase-line
+	print::countdown $(( $TIME - 1 )) "$MSG"
+}

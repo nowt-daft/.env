@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $HOME/includes/bashstrap
+source $BASHSTRAP
 include print
 
 SSH_DIR=$HOME/.ssh

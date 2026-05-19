@@ -1,31 +1,29 @@
 #!/usr/bin/env bash
 
+source .bashstrap
+include sys
+include print
+include prompt
+
 mkdir -p database/data/
 
-# chown $USER  database/
-# chown $USER  wp-content/
-# chown $USER  .htaccess
-#
-# chmod -R 755 database/
-# chmod -R 755 wp-content/
-# chmod    644 .htaccess
-# chmod    777 .env
+prompt::form $ROOT/.env.vars $ROOT/.env
 
-if ! [ -f .env ]; then
-	VARS=`cat .env.vars`
+if [ -z $WP_INITIALISED ]; then
+	print::hr
+	println --muted "INITIALISING PROJECT"
+	print::hr =
 
-	touch .env
-	echo "Entering .env setup wizard:"
+	git init
 
-	for line in $VARS; do
-		read -p "$line" answer
-		echo "$line$answer" >> .env
-	done
+	sys::file::set $ROOT/.env "WP_INITIALISED" "true"
 
-	echo
-	echo "💾 .env generated and saved"
+	print::hr
+	print::info "DOCKER COMPOSE UP -> init-compose.yml"
+	print::hr
+	print::warning "Wait until complete. Then execute run from SHELL."
+	print::hr _
+	print::hr =
+	
+	run --init
 fi
-
-echo "TODO: CREATE CONTAINERS WITHOUT WP-CONTENT/ VOLUME."
-echo "THEN RE-CREATE WITH WP-CONTENT/ VOLUME."
-echo "--> THIS WILL NEED SOME WORK."

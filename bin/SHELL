@@ -34,6 +34,7 @@ function SHELL::install {
 	sys::copy $ROOT/includes/prompt    $TARGET/includes
 	sys::copy $ROOT/includes/string    $TARGET/includes
 	sys::copy $ROOT/includes/sys       $TARGET/includes
+	sys::copy $ROOT/includes/bubble    $TARGET/includes
 	sys::copy $ROOT/includes/template  $TARGET/includes
 
 	template::directory::copy ssh $TARGET/templates/ssh
@@ -49,6 +50,12 @@ function SHELL::install {
 	for line in ${ENV[@]}; do
 		sys::file::append $TARGET/.env "$line"
 	done
+
+	print::hr
+}
+
+function SHELL::prefix {
+	print --muted "[$(basename $ROOT)]"
 }
 
 function SHELL::start {
@@ -65,6 +72,8 @@ function SHELL::start {
 
 	source .bashstrap
 	include print
+	include string
+	include sys
 
 	print::hr
 	println --inverse " SHELL :: $(basename $PWD) "
@@ -72,13 +81,17 @@ function SHELL::start {
 	print::list $(cat $ROOT/.env)
 	print::hr
 
+	print::list $(string::split $PATH ":")
+
+	print::hr
 	if [ -f $ROOT/.rc ]; then
 		println --inverse " RC :: $ROOT/.rc "
-		source $ROOT/.rc
 		print::hr
+		source $ROOT/.rc
 	fi
 	print::ok
-
+	# THIS DOES NOT QUITE WORK... NEEDS A TWEAKIN'...
+	export PS1="$(SHELL::prefix) $PS1"
 	bash
 }
 
