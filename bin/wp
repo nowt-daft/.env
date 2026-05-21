@@ -210,8 +210,11 @@ function wp::type {
 }
 
 function wp::pattern {
-	local THEME_DIR=
-	if ! THEME_DIR=$(wp::is-theme); then
+	local THEME_DIR=$(wp::is-theme $PWD)
+
+	if [ -z $THEME_DIR ] && [ -d $ROOT/wp-content/themes/default ]; then
+		THEME_DIR=$ROOT/wp-content/themes/default
+	else
 		print::error "[ABORT] This command must be called from within a WP project."
 		return 1
 	fi
@@ -220,20 +223,23 @@ function wp::pattern {
 	local PATTERN_DIR=$THEME_DIR/patterns
 	local FILE=$PATTERN_DIR/$NAME.php
 
-	declare -A data
-	data["\$NAME"]=$NAME
-	data["\$SLUG"]=$(basename $THEME_DIR)/$NAME
+	declare -A view
+	view["\$NAME"]=$NAME
+	view["\$SLUG"]=$(basename $THEME_DIR)/$NAME
 
 	print::hr
 	echo "✨ GENERATING WORDPRESS PATTERN <$NAME>"
 	echo "📂 $FILE"
 
-	template::file wp/pattern/\$NAME.php $FILE data
+	template::file wp/pattern/\$NAME.php $FILE view
 }
 
 function wp::template {
-	local THEME_DIR=
-	if ! THEME_DIR=$(wp::is-theme); then
+	local THEME_DIR=$(wp::is-theme $PWD)
+
+	if [ -z $THEME_DIR ] && [ -d $ROOT/wp-content/themes/default ]; then
+		THEME_DIR=$ROOT/wp-content/themes/default
+	else
 		print::error "[ABORT] This command must be called from within a WP project."
 		return 1
 	fi
@@ -246,7 +252,28 @@ function wp::template {
 	echo "✨ GENERATING WORDPRESS TEMPLATE <$NAME>"
 	echo "📂 $FILE"
 
-	template::file wp/template/$NAME.html $FILE
+	template::file::copy wp/template/$NAME.html $FILE
+}
+
+function wp::template::part {
+	local THEME_DIR=$(wp::is-theme $PWD)
+
+	if [ -z $THEME_DIR ] && [ -d $ROOT/wp-content/themes/default ]; then
+		THEME_DIR=$ROOT/wp-content/themes/default
+	else
+		print::error "[ABORT] This command must be called from within a WP project."
+		return 1
+	fi
+
+	local NAME=${1:-"template-part"}
+	local PARTS=$THEME_DIR/parts
+	local FILE=$PARTS/$NAME.html
+
+	print::hr
+	echo "✨ GENERATING WORDPRESS TEMPLATE <$NAME>"
+	echo "📂 $FILE"
+
+	template::file::copy wp/template/$NAME.html $FILE
 }
 
 CMD=$1
@@ -261,6 +288,7 @@ case $CMD in
 	type) wp::type $@ ;;
 	pattern) wp::pattern $@ ;;
 	template) wp::template $@ ;;
+	part) wp::template::part $@ ;;
 	*) wp::usage ;;
 esac
 

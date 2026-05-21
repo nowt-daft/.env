@@ -66,13 +66,15 @@ function template::file {
 
 	local SRCE=$1
 	local DEST=$2
-	local -n DATA=$3
+	local -n RENDER_DATA=$3
 
 	if ! template::file::copy $SRCE $DEST; then
 		print::error "$PREFIX [FAILED COPY] $SRCE -> $DEST"
+		return 3
 	fi
-	if ! template::file::render $DEST DATA; then
+	if ! template::file::render $DEST RENDER_DATA; then
 		print::error "$PREFIX [FAILED RENDER] $DEST"
+		return 4
 	fi
 
 	print::ok \

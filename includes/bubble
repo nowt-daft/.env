@@ -17,5 +17,5 @@ function bubble {
 		return 0
 	fi
 
-	echo $(bubble $CALLBACK `dirname $DIR`)
+	bubble $CALLBACK `dirname $DIR`
 }
