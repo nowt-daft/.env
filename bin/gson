@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+source $ROOT/.bashstrap
+include string
+include print
+
+FILE=$1
+
+print::hr
+
+if [ -z $FILE ]; then
+	print::error "[MISSING] No Filename passed."
+	exit 1
+fi
+
+if ! [ -f $FILE ]; then
+	print::error "[DOES NOT EXIST] $FILE"
+	exit 2
+fi
+
+println --bold --blue "GSON (Graham's Easy Object Notation) READER"
+println --muted "🗎 $FILE"
+print::hr
+
+# TODO: Pass info to JavaScript...
+
+print::hr
+print::done

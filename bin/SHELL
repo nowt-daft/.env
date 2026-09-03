@@ -64,7 +64,7 @@ function SHELL::start {
 		return 1
 	fi
 
-	if [ $ROOT == $PWD ]; then
+	if [[ $ROOT == $PWD ]]; then
 		include print
 		print::warning "[ABORT] Already inside SHELL."
 		exit 1
@@ -77,6 +77,13 @@ function SHELL::start {
 
 	print::hr
 	println --inverse " SHELL :: $(basename $PWD) "
+	
+	if [ -f $ROOT/.rc ]; then
+		println --inverse " RC :: $ROOT/.rc "
+		print::hr
+		source $ROOT/.rc
+	fi
+
 	print::hr
 	print::list $(cat $ROOT/.env)
 	print::hr
@@ -84,11 +91,6 @@ function SHELL::start {
 	print::list $(string::split $PATH ":")
 
 	print::hr
-	if [ -f $ROOT/.rc ]; then
-		println --inverse " RC :: $ROOT/.rc "
-		print::hr
-		source $ROOT/.rc
-	fi
 	print::ok
 	# THIS DOES NOT QUITE WORK... NEEDS A TWEAKIN'...
 	export PS1="$(SHELL::prefix) $PS1"

@@ -11,3 +11,13 @@ function string::split {
 
 	echo ${parts[@]}
 }
+
+function string::contains {
+	local SOURCE=$1
+	local QUERY=$2
+
+	if [[ $SOURCE == *$QUERY* ]]; then
+		return 0
+	fi
+	return 1
+}

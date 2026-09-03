@@ -4,12 +4,17 @@
 !.gitignore
 
 # CONFIG
+!.bashstrap
+!.path
+!.path.d/
+!.path.d/*
 !.rc
 !.htaccess
 !.env.vars
 !.env.example
 !compose.yml
 !init-compose.yml
+!nginx.conf
 
 # SCRIPTS
 !INIT

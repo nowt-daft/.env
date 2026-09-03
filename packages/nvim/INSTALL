@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+source $HOME/.bashstrap
+include sys
+
 NAME=nvim-linux-x86_64
 
 if ! [ -d $NAME]; then
@@ -15,7 +18,9 @@ cp -R  $NAME/bin/*    ~/.local/bin
 cp -R  $NAME/lib/*    ~/.local/lib
 cp -R  $NAME/share/*  ~/.local/share
 
+# THIS MIGHT NEED TWEAKED.
+git clone https://github.com/NvChad/starter default-config
 cp -R .config/nvim/*  ~/.config/nvim
 
+sudo $(sys::install) node # I DONT'T WANNA DO THIS IF UBUNTU? HOWEVER, WE JUST NEED NPM...
 #cp nvim.desktop ~/.local/share/applications
-git clone https://github.com/NvChad/starter default-config

@@ -90,7 +90,7 @@ function wp::site {
 	template::directory::copy wp/site $DEST
 	sys::copy $ROOT/bin/wp $DEST/bin
 
-	TEMPLATES=(pattern plugin theme type)
+	TEMPLATES=(pattern plugin theme type template)
 	for template_dir in ${TEMPLATES[@]}; do
 		template::directory::copy wp/$template_dir $DEST/templates/wp/$template_dir
 	done

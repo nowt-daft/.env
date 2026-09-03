@@ -9,7 +9,7 @@ function __find_root {
 		return 1
 	fi
 
-	if [ -d $DIR/.bashstrap ]; then
+	if [ -f $DIR/.bashstrap ]; then
 		echo $DIR
 		return 0
 	fi
@@ -31,9 +31,6 @@ function import {
 }
 
 function include {
-	if [ -z $ROOT ]; then
-		export ROOT=$(__find_root)
-	fi
 	local INCLUDES_DIR=${ROOT:-$HOME}/includes
 	import $INCLUDES_DIR/$1 || import $HOME/includes/$1
 }
@@ -56,5 +53,9 @@ function set-env {
 	set +o allexport
 }
 
+if [ -z $ROOT ]; then
+	export ROOT=$(__find_root)
+	export BASHSTRAP=$ROOT/.bashstrap
+fi
 set-env
 import   $ROOT/.path

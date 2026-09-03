@@ -7,17 +7,14 @@ function sys::has {
 }
 
 function sys::install {
-	if has apt; then
+	if sys::has apt; then
 		echo "apt install -y"
-	elif has apk; then
+	elif sys::has apk; then
 		echo "apk add -y"
-	elif has dnf; then
+	elif sys::has dnf; then
 		echo "dnf install -y"
 	else
-		echo \
-			"echo -e \
-			\e[1;31m[UNSUPPORTED SYSTEM]\e[0m; \
-			exit 1;"
+		echo "echo -e \e[1;31m[UNSUPPORTED SYSTEM]\e[0m; exit 1;"
 		return 1
 	fi
 }

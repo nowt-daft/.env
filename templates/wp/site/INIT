@@ -8,6 +8,7 @@ include prompt
 mkdir -p database/data/
 
 prompt::form $ROOT/.env.vars $ROOT/.env
+set-env
 
 if [ -z $WP_INITIALISED ]; then
 	print::hr
@@ -19,7 +20,7 @@ if [ -z $WP_INITIALISED ]; then
 	sys::file::set $ROOT/.env "WP_INITIALISED" "true"
 
 	print::hr
-	print::info "DOCKER COMPOSE UP -> init-compose.yml"
+	print::info "PODMAN COMPOSE UP -> init-compose.yml"
 	print::hr
 	print::warning "Wait until complete. Then execute run from SHELL."
 	print::hr _
